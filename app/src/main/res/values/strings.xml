@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">抖一抖</string>
+
+    <string name="finish">退出不了哦！</string>
+    <string name="cant">不能返回了 ^ ^！</string>
+    <string name="callB">叫大哥，告诉你怎么退出~</string>
+    <string name="fish">你不能做一条没有梦想的咸鱼啊！</string>
+    <string name="fail">你的梦想反正也不会实现- . -</string>
+</resources>
