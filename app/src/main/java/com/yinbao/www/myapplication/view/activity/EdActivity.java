@@ -32,7 +32,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.yinbao.www.myapplication.R;
 import com.yinbao.www.myapplication.adapter.JokeAdapter;
 import com.yinbao.www.myapplication.bean.JokeBean;
-import com.yinbao.www.myapplication.util.OkHttpTool;
 import com.yinbao.www.myapplication.util.ToastUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -144,12 +143,12 @@ public class EdActivity extends AppCompatActivity {
         params.put("key","1e17e45ab357fdac10b9c3cc889f2467");
 
         //测试网络请求  OKhttp
-        OkHttpTool.getInstance().doRequest("http://web.juhe.cn:8080/constellation/getAll", params, this, new OkHttpTool.HttpResult() {
-            @Override
-            public void onResult(String result) {
-                Log.e("bobo",result);
-            }
-        },true);
+//        OkHttpTool.getInstance().doRequest("http://web.juhe.cn:8080/constellation/getAll", params, this, new OkHttpTool.HttpResult() {
+//            @Override
+//            public void onResult(String result) {
+//                Log.e("bobo",result);
+//            }
+//        },true);
 
 
         OkHttpUtils.get().url("http://v.juhe.cn/joke/content/list.php")
