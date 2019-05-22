@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         setListener();
 
+
     }
 
     private void testGetData() {
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    String url = "http://www.mosaichk.net/app/mx206/mx206.bin";
+    String url = "http://www.mosaichk.net/app/mx206/mx206.bin";//测试下载mx206升级硬件程序
     String mSDCardPath= Environment.getExternalStorageDirectory().getAbsolutePath();
     File dest = new File(mSDCardPath,   url.substring(url.lastIndexOf("/") + 1));
 
