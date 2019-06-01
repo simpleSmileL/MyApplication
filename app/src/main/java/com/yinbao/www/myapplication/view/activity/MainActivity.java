@@ -19,11 +19,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yinbao.www.myapplication.MyApp;
 import com.yinbao.www.myapplication.R;
 import com.yinbao.www.myapplication.util.ToastUtil;
 import com.yinbao.www.myapplication.widget.HorizontalProgressBarWithNumber;
+import com.yinbao.www.myapplication.widget.ShowDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -182,7 +184,18 @@ public class MainActivity extends AppCompatActivity {
                 ToastUtil.ShowMyToast(this,"暂停下载");
                 break;
             case R.id.cancel:
-                ToastUtil.ShowMyToast(this,"取消下载");
+                ShowDialog showDialog = new ShowDialog();
+                showDialog.show(MainActivity.this, "实名认证", "说的那个帅哥好说的时代光华可视电话GV时代光华时刻记得发货时肯定会给粉丝都会速度快结婚是的韩国可是打开", new ShowDialog.OnBottomClickListener() {
+                    @Override
+                    public void positive() {
+                        Toast.makeText(MainActivity.this, "你点击了确定哦", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void negative() {
+                        Toast.makeText(MainActivity.this, "你干嘛要取消啊", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
         }
     }
