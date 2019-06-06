@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.yinbao.www.myapplication.MyApp;
 import com.yinbao.www.myapplication.R;
 import com.yinbao.www.myapplication.util.ToastUtil;
+import com.yinbao.www.myapplication.widget.DateSelectionDialog;
 import com.yinbao.www.myapplication.widget.HorizontalProgressBarWithNumber;
 import com.yinbao.www.myapplication.widget.ShowDialog;
 
@@ -96,10 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.e("test",response.body().string());
+                Log.e("test", response.body().string());
             }
         });
-
 
 
     }
@@ -133,20 +133,20 @@ public class MainActivity extends AppCompatActivity {
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setIcon(R.mipmap.ic_launcher).setTitle("当前网络非WiFi，继续浏览吗？")
-            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ToastUtil.ShowMyToast(MainActivity.this, "有的是流量，嗨起来！！");
-                    Intent intent = new Intent(MainActivity.this, EdActivity.class);
-                    startActivityForResult(intent, CODE);
-                }
-            })
-            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ToastUtil.ShowMyToast(MainActivity.this, "穷苦人家- . - ");
-                }
-            });
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ToastUtil.ShowMyToast(MainActivity.this, "有的是流量，嗨起来！！");
+                        Intent intent = new Intent(MainActivity.this, EdActivity.class);
+                        startActivityForResult(intent, CODE);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ToastUtil.ShowMyToast(MainActivity.this, "穷苦人家- . - ");
+                    }
+                });
         builder.show();
 
     }
@@ -163,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     String url = "http://www.mosaichk.net/app/mx206/mx206.bin";//测试下载mx206升级硬件程序
-    String mSDCardPath= Environment.getExternalStorageDirectory().getAbsolutePath();
-    File dest = new File(mSDCardPath,   url.substring(url.lastIndexOf("/") + 1));
+    String mSDCardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    File dest = new File(mSDCardPath, url.substring(url.lastIndexOf("/") + 1));
 
 
     @OnClick({R.id.start, R.id.stop, R.id.cancel})
@@ -177,11 +177,25 @@ public class MainActivity extends AppCompatActivity {
 //                    .load(url)     //读取下载地址
 //                    .setDownloadPath(dest.getAbsolutePath()) //设置文件保存的完整路径
 //                    .start();   //启动下载
-                Log.e("download",dest.getAbsolutePath());
-                ToastUtil.ShowMyToast(this,"开始下载");
+                Log.e("download", dest.getAbsolutePath());
+                ToastUtil.ShowMyToast(this, "开始下载");
                 break;
             case R.id.stop:
-                ToastUtil.ShowMyToast(this,"暂停下载");
+                final DateSelectionDialog dialog1 = new DateSelectionDialog(MainActivity.this);
+                dialog1.setNegativeButton(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog1.dismiss();
+                    }
+                });
+                dialog1.setPositiveButton(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this,dialog1.getDate(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog1.setCanceledOnTouchOutside(false);
+                dialog1.show();
                 break;
             case R.id.cancel:
                 ShowDialog showDialog = new ShowDialog();
@@ -252,11 +266,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void downloadFile(){
+    private void downloadFile() {
         //下载路径
         final String url = "http://www.mosaichk.net/app/mx206/mx206.bin";
         final long startTime = System.currentTimeMillis();
-        Log.i("DOWNLOAD","startTime="+startTime);
+        Log.i("DOWNLOAD", "startTime=" + startTime);
 
         Request request = new Request.Builder().url(url).build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {
@@ -264,17 +278,18 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 // 下载失败
                 e.printStackTrace();
-                Log.i("DOWNLOAD","download failed");
+                Log.i("DOWNLOAD", "download failed");
                 ToastUtil.ShowMyToast(MainActivity.this, "下载失败");
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Sink sink = null;
                 BufferedSink bufferedSink = null;
                 try {
-                    String mSDCardPath= Environment.getExternalStorageDirectory().getAbsolutePath();
-                    File dest = new File(mSDCardPath,   url.substring(url.lastIndexOf("/") + 1));
-                    if(dest.exists()){
+                    String mSDCardPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    File dest = new File(mSDCardPath, url.substring(url.lastIndexOf("/") + 1));
+                    if (dest.exists()) {
                         dest.delete();
                     }
                     sink = Okio.sink(dest);
@@ -282,15 +297,15 @@ public class MainActivity extends AppCompatActivity {
                     bufferedSink.writeAll(response.body().source());
 
                     bufferedSink.close();
-                    Log.i("DOWNLOAD","download success");
+                    Log.i("DOWNLOAD", "download success");
                     ToastUtil.ShowMyToast(MainActivity.this, "下载完成");
-                    Log.i("DOWNLOAD","totalTime="+ (System.currentTimeMillis() - startTime));
+                    Log.i("DOWNLOAD", "totalTime=" + (System.currentTimeMillis() - startTime));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i("DOWNLOAD","download failed");
+                    Log.i("DOWNLOAD", "download failed");
                     ToastUtil.ShowMyToast(MainActivity.this, "下载失败");
                 } finally {
-                    if(bufferedSink != null){
+                    if (bufferedSink != null) {
                         bufferedSink.close();
                     }
 
